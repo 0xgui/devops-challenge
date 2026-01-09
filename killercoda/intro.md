@@ -1,12 +1,12 @@
 # New Message from @backend-dev
 
 **@backend-dev** 10:43 AM:
-> Hey, we have a problem. The new Python service works on my machine, but when we deploy it with `APP_ENV=prod`, it just keeps restarting.
+> Hey, the new health-check service is crashing in production.
 > 
-> Can you look at the Docker logs and fix it? It should be stable.
+> It's supposed to write a heartbeat file to `/data/health.txt` every 5 seconds, but it keeps restarting.
 > 
-> The repo is cloned in `~/challenge`.
+> It works fine on my laptop where I'm root... might be a permission thing?
 > 
 > Thanks!
 
-⚠️ **Warning**: The previous engineer left some "logic" in the startup script.
+⚠️ **Warning**: The previous engineer didn't test this with non-root users.

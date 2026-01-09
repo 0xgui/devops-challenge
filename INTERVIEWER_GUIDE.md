@@ -1,36 +1,36 @@
 # Mid DevOps high-signal Challenge
 
-**Goal**: Verify debugging depth by troubleshooting a container restart loop.
+**Goal**: Verify debugging depth regarding Linux permissions, Users, and Docker Volumes.
 
 ## The Scenario
 
-You are provided with a service that **looks** configured correctly but crashes in a loop when run in "production" mode.
+A simple shell script container tries to write to a volume but fails due to user/permission mismatch.
 
 ## Task
 
-> "The container starts but doesn't stay up. It keeps restarting. Please fix it."
+> "The container starts but keeps restarting. It's supposed to write a health file. Please fix it."
 
 ## Expected Candidate Flow (Strong Signal)
 
-1. **Run**: `docker-compose up --build`
-2. **Observe**: Container enters a restart loop (`Up Less than a second` or continuous logs).
-3. **Debug**: `docker logs <container>` to see the specific Python error:
-   > `ERROR: Missing required configuration for prod`
-4. **Analyze**: Reads `app.py` or `docker-compose.yml` to understand why `ENV=prod` triggers failure.
+1. **Run**: `docker-compose up`
+2. **Observe**: Container enters a restart loop.
+3. **Debug**: `docker logs <container>` -> sees `can't create /data/health.txt: Permission denied`.
+4. **Analyze**:
+   - Checks `docker-compose.yml`: sees `user: "1001:1001"`.
+   - Checks volume permissions: `ls -ld data` -> sees `drwx------ root root`.
 5. **Fix**:
-   - Option A: Change `APP_ENV` to `dev`.
-   - Option B: Add the missing functionality/config (if hypothetically requested).
-   - Option C: Remove `restart: always` to see the crash clearly (good debugging step).
-6. **Prevention**: Discusses health checks and better logging.
+   - **Best Fix**: `chown 1001:1001 data` (aligns host dir with container user).
+   - **Alternative**: Change `user` in compose (needs justification).
+6. **Verify**: Container stays up.
 
 ## Red Flags (Immediate Reject)
 
-- **Blindly ignores logs**: Just keeps running `up` hoping it works.
-- **Doesn't understand restart policies**: Thinks `restart: always` fixes crashes.
-- **Blames Docker** without reading the application code.
+- **`chmod 777 data`**: Dangerous "fix" that shows lack of security awareness.
+- **Removing `user: 1001`**: Running as root without understanding why it was there.
+- **Trial and error**: Randomly changing paths or flags.
 
 ## Follow-Up Questions
 
-- "Why is `restart: always` dangerous without a health check?" (Answer: Infinite loops mask failures).
-- "How would you detect this in Kubernetes?" (Answer: CrashLoopBackOff).
-- "How would you implement a health check for this Python app?"
+- "Why is `restart: always` dangerous here?" (Answer: Infinite log spam / resource usage).
+- "How would you handle this in Kubernetes?" (Answer: `securityContext`, `initContainers` to chown volume, or CSI driver handling).
+- "Why is running as user 1001 better than root?"

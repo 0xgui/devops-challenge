@@ -12,5 +12,11 @@ git clone https://github.com/0xgui/devops-challenge.git challenge
 
 cd challenge
 
+# BREAK: Create data directory with root ownership and restrictive permissions
+# The container runs as user 1001, so it won't be able to write here.
+mkdir -p data
+chown root:root data
+chmod 700 data
+
 # Make sure we are in the directory
 echo "Environment provisioned in /root/challenge"

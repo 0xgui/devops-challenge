@@ -1,9 +1,11 @@
 version: "3.8"
 
 services:
-  app:
-    build: .
-    environment:
-      - APP_ENV=prod
-      - STARTUP_TIMEOUT=5
+  writer:
+    image: alpine:3.19
+    user: "1001:1001"
+    volumes:
+      - ./data:/data
+      - ./writer.sh:/writer.sh:ro
+    command: ["sh", "/writer.sh"]
     restart: always
