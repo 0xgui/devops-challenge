@@ -5,7 +5,7 @@ services:
     image: alpine:3.19
     user: "1001:1001"
     volumes:
-      - ./data:/data
-      - ./writer.sh:/writer.sh:ro
+      - ./data:/data:ro
+      - ./writer.sh:/data/writer.sh:ro
     command: ["sh", "/writer.sh"]
     restart: always

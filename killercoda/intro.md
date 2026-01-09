@@ -5,8 +5,8 @@
 > 
 > It's supposed to write a heartbeat file to `/data/health.txt` every 5 seconds, but it keeps restarting.
 > 
-> It works fine on my laptop where I'm root... might be a permission thing?
+> It works fine on my machine...
 > 
 > Thanks!
 
-⚠️ **Warning**: The previous engineer didn't test this with non-root users.
+
