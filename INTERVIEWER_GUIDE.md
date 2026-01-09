@@ -4,7 +4,7 @@
 
 ## The Scenario
 
-You are given a small repo with a simple Flask app. The app fails to start or is unreachable.
+You are given a broken repository with a Flask app. It crashes on startup due to improper dependency management and, once fixed, is unreachable due to networking misconfiguration.
 
 ## Task
 
@@ -24,14 +24,14 @@ You are given a small repo with a simple Flask app. The app fails to start or is
 
 A mid-level DevOps Engineer should:
 
-1. **Build and run**: `docker-compose up --build`
-2. **Notice app is “running” but unreachable`
-3. **Check logs**: `docker logs`
-4. **Inspect app config**
-5. **Recognize 127.0.0.1 issue**
-6. **Fix to**: `app.run(host="0.0.0.0", port=port)`
-7. **Rebuild and verify**
-8. **Explain why this failed and how to prevent it**
+1. **Run**: `docker-compose up --build`
+2. **Observe Crash**: Container exits immediately with `ModuleNotFoundError: No module named 'requests'`.
+3. **Fix 1**: Add `requests` to `requirements.txt`.
+4. **Rebuild & Run**: App starts, but `curl localhost:8080` (or browser) fails.
+5. **Debug Network**: Checks `docker logs`, sees `Running on http://127.0.0.1:5000`.
+6. **Fix 2**: Edit `app.py` to change host to `"0.0.0.0"` (or use equivalent env var).
+7. **Verify**: App is reachable and returns "Hello from Docker!".
+8. **(Bonus) Security**: Notices the hardcoded `API_KEY` in `docker-compose.yml` and mentions it's unsafe.
 
 ## Red Flags (Immediate Reject)
 
