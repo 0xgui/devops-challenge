@@ -1,13 +1,18 @@
-from flask import Flask
-import requests
 import os
+import time
+import sys
 
-app = Flask(__name__)
+ENV = os.getenv("APP_ENV", "dev")
+TIMEOUT = int(os.getenv("STARTUP_TIMEOUT", "3"))
 
-@app.route("/")
-def hello():
-    return "Hello from Docker!"
+print("Starting application...")
+time.sleep(TIMEOUT)
 
-if __name__ == "__main__":
-    port = int(os.getenv("APP_PORT", 5000))
-    app.run(host="127.0.0.1", port=port)
+if ENV == "prod":
+    print("ERROR: Missing required configuration for prod")
+    sys.exit(1)
+
+print("Application started successfully")
+
+while True:
+    time.sleep(10)
