@@ -1,11 +1,14 @@
 # The Task
 
-A simple Flask application has been provided in the \`challenge\` directory.
-However, it is currently broken.
+The repository has been cloned to `~/challenge`.
+
+There are reports that the application is:
+1. Crashing on startup.
+2. Not reachable even when it runs.
 
 ## Goal
 
-1.  Build and run the application using \`docker-compose\`.
+1.  Build and run the application using `docker-compose`.
 2.  Debug why it is not reachable.
 3.  Fix the issue so that you can curl it or access it via the mapped port.
 

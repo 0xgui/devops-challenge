@@ -7,3 +7,4 @@ services:
       - "8080:5000"
     environment:
       - APP_PORT=5000
+      - API_KEY=1234-super-secret-do-not-share
